@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use App\Contracts\Repositories\Task\TaskRepository;
+use App\Infrastructure\Repositories\Task\CachedTaskRepository;
+use App\Infrastructure\Repositories\Task\EloquentTaskRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,14 +21,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(TenantManager::class, function() {
+        $this->app->singleton(TenantManager::class, function () {
             return new TenantManager();
         });
 
-        $this->app->bind(
-            \App\Contracts\Repositories\Task\TaskRepository::class,
-            \App\Infrastructure\Repositories\Task\CachedTaskRepository::class
-        );
+        $this->app->bind(TaskRepository::class, CachedTaskRepository::class);
+
+        $this->app->when(CachedTaskRepository::class)
+            ->needs(TaskRepository::class)
+            ->give(EloquentTaskRepository::class);
     }
 
     /**
@@ -47,7 +51,8 @@ class AppServiceProvider extends ServiceProvider
             app()->isProduction(),
         );
 
-        Password::defaults(fn (): ?Password => app()->isProduction()
+        Password::defaults(
+            fn(): ?Password => app()->isProduction()
             ? Password::min(12)
                 ->mixedCase()
                 ->letters()
