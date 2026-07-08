@@ -162,7 +162,7 @@ This brings up three containers: `php_app` (Laravel), `postgres_db`, and `redis_
 ### 3. Bootstrap the application
 
 ```bash
-docker exec -it php_app bash
+docker exec -it php_app ash
 
 composer install
 cp .env.example .env
@@ -186,11 +186,6 @@ docker exec -it php_app bash
 php artisan test
 ```
 
-Or with coverage:
-
-```bash
-php artisan test --coverage
-```
 
 ### Test structure
 

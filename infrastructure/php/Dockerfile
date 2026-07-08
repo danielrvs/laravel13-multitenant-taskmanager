@@ -1,4 +1,4 @@
-FROM php:8.4-fpm-alpine as php
+FROM php:8.4-fpm-alpine AS php
 
 RUN apk update && \
     apk upgrade && \
@@ -27,5 +27,7 @@ RUN docker-php-ext-configure intl && \
 RUN apk add --no-cache autoconf g++ make && \
     pecl install redis && \
     docker-php-ext-enable redis
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www

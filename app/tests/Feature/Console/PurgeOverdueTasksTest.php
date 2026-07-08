@@ -19,9 +19,12 @@ class PurgeOverdueTasksTest extends TestCase
     {
         $this->travelTo(Carbon::parse('2026-06-02'));
 
+        $tenant = \App\Models\Tenant\Tenant::factory()->create();
+        $user = \App\Models\User::factory()->create(['tenant_id' => $tenant->id]);
+
         $taskShouldBeDeleted = Task::create([
-            'tenant_id' => 1,
-            'user_id' => 1,
+            'tenant_id' => $tenant->id,
+            'user_id' => $user->id,
             'title' => 'Overdue Task',
             'description' => 'This task is overdue and should be deleted.',
             'status' => 'pending',
@@ -30,8 +33,8 @@ class PurgeOverdueTasksTest extends TestCase
         ]);
 
         $taskShouldNotBeDeleted = Task::create([
-            'tenant_id' => 1,
-            'user_id' => 1,
+            'tenant_id' => $tenant->id,
+            'user_id' => $user->id,
             'title' => 'Completed Task',
             'description' => 'This task is overdue but completed, should not be deleted.',
             'status' => 'pending',
@@ -40,8 +43,8 @@ class PurgeOverdueTasksTest extends TestCase
         ]);
 
         $taskInTheFuture = Task::create([
-            'tenant_id' => 1,
-            'user_id' => 1,
+            'tenant_id' => $tenant->id,
+            'user_id' => $user->id,
             'title' => 'Future Task',
             'description' => 'This task is in the future, should not be deleted.',
             'status' => 'pending',

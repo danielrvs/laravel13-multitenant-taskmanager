@@ -37,7 +37,7 @@ class UserFactory extends Factory
             'two_factor_recovery_codes' => null,
             'two_factor_confirmed_at' => null,
             'role' => UserRole::VIEWER,
-            'tenant_id' => fn() => Tenant::inRandomOrder()->first()->id ?? Tenant::factory()
+            'tenant_id' => fn() => Tenant::inRandomOrder()->first()?->id ?? Tenant::factory()
             /* @end-chisel-2fa */
         ];
     }
