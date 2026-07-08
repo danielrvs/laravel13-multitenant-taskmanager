@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Model\Task;
 
 use App\Models\Task\Vo\TaskPriority;
