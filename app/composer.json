@@ -1,8 +1,8 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/react-starter-kit",
+    "name": "danielrvs/laraval13-multitenants-tasksmanager",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "High-performance Multi-tenant Task Management API built with Laravel and PHP 8.4. Showcasing Repository Decorator pattern with Redis caching, dynamic DTOs via Reflection, memory-optimized batch processing (baseline < 28MB RAM), and strict TDD.",
     "keywords": [
         "laravel",
         "framework"
