@@ -67,7 +67,7 @@ class TaskStatusTest extends TestCase
     public function it_cannot_transition_from_pending_directly_to_completed(): void
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage("Cannot transition from 'pending' to 'completed'");
+        $this->expectExceptionMessage("Transition not allowed from 'pending' to 'completed'");
         TaskStatus::PENDING->transitionTo(TaskStatus::COMPLETED);
     }
 
@@ -75,7 +75,7 @@ class TaskStatusTest extends TestCase
     public function it_cannot_transition_from_completed_to_pending(): void
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage("Cannot transition from 'completed' to 'pending'");
+        $this->expectExceptionMessage("Transition not allowed from 'completed' to 'pending'");
         TaskStatus::COMPLETED->transitionTo(TaskStatus::PENDING);
     }
 
@@ -83,7 +83,7 @@ class TaskStatusTest extends TestCase
     public function it_cannot_transition_from_completed_to_in_progress(): void
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage("Cannot transition from 'completed' to 'in_progress'");
+        $this->expectExceptionMessage("Transition not allowed from 'completed' to 'in_progress'");
         TaskStatus::COMPLETED->transitionTo(TaskStatus::IN_PROGRESS);
     }
 
