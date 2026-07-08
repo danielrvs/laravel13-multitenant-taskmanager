@@ -182,8 +182,14 @@ php artisan db:seed
 ## Running Tests
 
 ```bash
-docker exec -it php_app bash
+docker exec -it php_app ash
 php artisan test
+```
+
+Or with coverage:
+
+```bash
+docker exec -it php_app php artisan test --coverage
 ```
 
 
