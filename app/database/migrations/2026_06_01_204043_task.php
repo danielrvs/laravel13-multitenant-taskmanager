@@ -13,23 +13,18 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('tenant_id');
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('tenant_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->text('description')->nullable();
             $table->enum('status', ['pending', 'in_progress', 'completed'])->default('pending');
             $table->enum('priority', ['low', 'medium', 'high'])->default('medium');
             $table->timestamp('due_date')->nullable();
-            $table->unsignedBigInteger('assigned_to')->nullable();
+            $table->foreignId('assigned_to')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
-
-            $table->index('tenant_id');
-            $table->index('user_id');
-            $table->index('assigned_to');
 
             $table->index(['tenant_id', 'due_date']);
             $table->index(['tenant_id', 'assigned_to']);
-
         });
     }
 
