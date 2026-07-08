@@ -115,6 +115,15 @@ class TaskTest extends TestCase
     }
 
     #[Test]
+    public function it_cannot_transition_from_completed_to_pending(): void
+    {
+        $this->expectException(\LogicException::class);
+        $task = $this->makeTask(['status' => 'in_progress']);
+        $task->transitionStatus(TaskStatus::COMPLETED);
+        $task->transitionStatus(TaskStatus::PENDING);
+    }
+
+    #[Test]
     public function it_is_overdue_when_due_date_has_passed(): void
     {
         $task = $this->makeTask(['due_date' => now()->subDay()]);

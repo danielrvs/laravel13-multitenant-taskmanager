@@ -12,7 +12,7 @@ Route::group(['prefix' => 'tasks', 'as' => 'tasks.', 'middleware' => 'auth:sanct
     Route::post('/', [TaskController::class, 'create'])->name('create');
     Route::get('/{id}', [TaskController::class, 'show'])->name('show');
     Route::put('/{id}', [TaskController::class, 'update'])->name('update');
-    Route::patch('/{id}', [TaskController::class, 'update'])->name('update');
+    Route::patch('/{id}', [TaskController::class, 'update'])->name('partial-update');
     Route::delete('/{id}', [TaskController::class, 'delete'])->name('delete');
 });
 
