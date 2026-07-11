@@ -13,13 +13,13 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'tenant_id' => fn() => Tenant::inRandomOrder()->first()?->id ?? Tenant::factory(),
+            'tenant_id' => fn () => Tenant::inRandomOrder()->first()?->id ?? Tenant::factory(),
             'user_id' => function (array $attributes) {
                 return User::where('tenant_id', $attributes['tenant_id'])->inRandomOrder()->first()?->id
                     ?? User::factory()->create(['tenant_id' => $attributes['tenant_id']])->id;
             },
 
-            'title' => "Task " . $this->faker->sentence(3),
+            'title' => 'Task '.$this->faker->sentence(3),
             'description' => $this->faker->text(),
             'status' => 'pending',
             'priority' => 'medium',

@@ -10,17 +10,17 @@ use App\Models\Tenant\Tenant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
+use Illuminate\Validation\ValidationException;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 use ValueError;
 
 class TaskTest extends TestCase
 {
-
     use RefreshDatabase;
     use WithFaker;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->makeTenant(['id' => 1]);
@@ -41,7 +41,6 @@ class TaskTest extends TestCase
         return User::factory()->create($overrides);
     }
 
-
     #[Test]
     public function it_can_be_created(): void
     {
@@ -54,14 +53,14 @@ class TaskTest extends TestCase
     #[Test]
     public function title_cannot_be_empty(): void
     {
-        $this->expectException(\Illuminate\Validation\ValidationException::class);
+        $this->expectException(ValidationException::class);
         $this->makeTask(['title' => '']);
     }
 
     #[Test]
     public function title_cannot_exceed_255_characters(): void
     {
-        $this->expectException(\Illuminate\Validation\ValidationException::class);
+        $this->expectException(ValidationException::class);
         $this->makeTask(['title' => str_repeat('a', 256)]);
     }
 
@@ -83,7 +82,7 @@ class TaskTest extends TestCase
     {
         $this->makeTenant(['id' => 2]);
         $this->makeUser(['id' => 999, 'tenant_id' => 2]);
-        $this->expectException(\Illuminate\Validation\ValidationException::class);
+        $this->expectException(ValidationException::class);
         $task = $this->makeTask();
         $task->assignTo(999);
     }
@@ -92,7 +91,7 @@ class TaskTest extends TestCase
     public function it_cannot_be_assigned_to_the_same_user_that_created_it(): void
     {
         $this->makeUser(['id' => 1, 'tenant_id' => 1]);
-        $this->expectException(\Illuminate\Validation\ValidationException::class);
+        $this->expectException(ValidationException::class);
         $task = $this->makeTask(['tenant_id' => 1, 'user_id' => 1]);
         $task->assignTo(1);
     }

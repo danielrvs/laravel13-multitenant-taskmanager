@@ -9,17 +9,15 @@ use App\Models\Task\Task;
 
 class EloquentTaskRepository implements TaskRepository
 {
+    public function __construct(private readonly Task $model) {}
 
-    public function __construct(private readonly Task $model)
-    {
-
-    }
     public function create(array $data, ?int $assigned_to = null): array
     {
         $task = $this->model->create($data);
         if ($assigned_to !== null) {
             $task->assignTo($assigned_to);
         }
+
         return $task->toArray();
     }
 
@@ -38,6 +36,7 @@ class EloquentTaskRepository implements TaskRepository
     public function find(int $id): ?array
     {
         $task = $this->model->find($id);
+
         return $task ? $task->toArray() : null;
     }
 

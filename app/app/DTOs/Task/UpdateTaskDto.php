@@ -17,6 +17,5 @@ final readonly class UpdateTaskDto extends AbstractDto
         public readonly ?string $due_date,
         public readonly ?int $assigned_to,
         public array $presentFields = []
-    ) {
-    }
+    ) {}
 }

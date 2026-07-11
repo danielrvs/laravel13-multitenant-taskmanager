@@ -4,23 +4,19 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 #[Signature('tasks:purge-overdue')]
 #[Description('Permanently delete overdue tasks')]
 class TasksPurgeOverdue extends Command
 {
-
-
     /**
      * Execute the console command.
      */
-
-
     public function handle(): int
     {
         $oneYearAgo = now()->subYear();
@@ -45,7 +41,7 @@ class TasksPurgeOverdue extends Command
                 foreach ($tasks as $task) {
                     Cache::forget("tenant_{$task->tenant_id}_tasks_{$task->id}");
 
-                    if (!in_array($task->tenant_id, $clearedTenants)) {
+                    if (! in_array($task->tenant_id, $clearedTenants)) {
                         Cache::forget("tenant_{$task->tenant_id}_tasks");
                         $clearedTenants[] = $task->tenant_id;
                     }
@@ -57,7 +53,7 @@ class TasksPurgeOverdue extends Command
                 }
             });
 
-        $this->info("Finished purging overdue tasks and cleaning cache.");
+        $this->info('Finished purging overdue tasks and cleaning cache.');
 
         $peakMemory = memory_get_peak_usage(true) / 1024 / 1024; // Convert bytes to MB
         $this->info(sprintf('Max RAM used: %.2f MB', $peakMemory));

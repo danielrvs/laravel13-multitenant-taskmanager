@@ -32,13 +32,11 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
-            /* @chisel-2fa */
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'two_factor_confirmed_at' => null,
             'role' => UserRole::VIEWER,
-            'tenant_id' => fn() => Tenant::inRandomOrder()->first()?->id ?? Tenant::factory()
-            /* @end-chisel-2fa */
+            'tenant_id' => fn () => Tenant::inRandomOrder()->first()?->id ?? Tenant::factory(),
         ];
     }
 
@@ -47,7 +45,7 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
     }
@@ -57,12 +55,10 @@ class UserFactory extends Factory
      */
     public function withTwoFactor(): static
     {
-        /* @chisel-2fa */
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'two_factor_secret' => encrypt('secret'),
             'two_factor_recovery_codes' => encrypt(json_encode(['recovery-code-1'])),
             'two_factor_confirmed_at' => now(),
         ]);
-        /* @end-chisel-2fa */
     }
 }

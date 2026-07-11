@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace Tests\Unit\Model\Task;
 
 use App\Models\Task\Vo\TaskPriority;
-use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class TaskPriorityTest extends TestCase
 {
-  
     #[Test]
     public function it_can_be_created_from_a_valid_string(): void
     {
@@ -19,7 +18,6 @@ class TaskPriorityTest extends TestCase
     }
 
     #[Test]
-
     public function it_throws_exception_for_invalid_string(): void
     {
         $this->expectException(\ValueError::class);
@@ -27,17 +25,17 @@ class TaskPriorityTest extends TestCase
     }
 
     #[Test]
-    public function it_can_compare_priorities():void
+    public function it_can_compare_priorities(): void
     {
         $this->assertTrue(
             TaskPriority::HIGH->isHigherThan(TaskPriority::MEDIUM)
-            );
+        );
         $this->assertTrue(
             TaskPriority::MEDIUM->isHigherThan(TaskPriority::LOW)
-            );
+        );
         $this->assertFalse(
             TaskPriority::LOW->isHigherThan(TaskPriority::HIGH)
-            );
+        );
     }
 
     #[Test]

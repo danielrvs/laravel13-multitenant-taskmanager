@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
-use App\Models\Task\Task;
 use App\Models\User;
 
 class TaskPolicy
@@ -34,12 +33,12 @@ class TaskPolicy
 
     public function create(User $user): bool
     {
-        return !$user->isViewer();
+        return ! $user->isViewer();
     }
 
     public function update(User $user, int $id): bool
     {
-        return !$user->isViewer();
+        return ! $user->isViewer();
     }
 
     public function delete(User $user, int $id): bool

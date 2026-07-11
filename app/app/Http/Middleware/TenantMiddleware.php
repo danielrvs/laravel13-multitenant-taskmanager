@@ -11,10 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TenantMiddleware
 {
-    public function __construct(private readonly TenantManager $tenantManager)
-    {
+    public function __construct(private readonly TenantManager $tenantManager) {}
 
-    }
     /**
      * Handle an incoming request.
      *

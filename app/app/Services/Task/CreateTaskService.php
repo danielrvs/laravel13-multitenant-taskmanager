@@ -10,15 +10,13 @@ use App\Jobs\NotifyTaskAssignment;
 
 class CreateTaskService
 {
-    public function __construct(private readonly TaskRepository $repository)
-    {
-    }
+    public function __construct(private readonly TaskRepository $repository) {}
 
     public function execute(CreateTaskDto $data): array
     {
         $task = $this->repository->create($data->toArray(), $data->getAssignedTo());
 
-        if (!empty($task) && !empty($task['assigned_to'])) {
+        if (! empty($task) && ! empty($task['assigned_to'])) {
             NotifyTaskAssignment::dispatch($task['id'], $task['assigned_to']);
         }
 

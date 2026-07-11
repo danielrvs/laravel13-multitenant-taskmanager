@@ -9,8 +9,8 @@ use App\Models\Task\Task;
 use App\Models\Tenant\Tenant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class TaskPolicyTest extends TestCase
 {
@@ -18,7 +18,7 @@ class TaskPolicyTest extends TestCase
 
     private function route(int $id = 0): string
     {
-        return sprintf("/api/tasks/%s", $id);
+        return sprintf('/api/tasks/%s', $id);
     }
 
     #[Test]
@@ -33,7 +33,7 @@ class TaskPolicyTest extends TestCase
             'tenant_id' => $tenant->id,
             'title' => 'Protected task',
             'description' => 'stricted security',
-            'user_id' => $admin->id
+            'user_id' => $admin->id,
         ]);
 
         $this->actingAs($viewer, 'sanctum');

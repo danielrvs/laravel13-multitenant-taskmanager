@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\DTOs\Task;
 
 use App\DTOs\AbstractDto;
-use App\Models\Task\Vo\TaskStatus;
 use App\Models\Task\Vo\TaskPriority;
+use App\Models\Task\Vo\TaskStatus;
 
 final readonly class CreateTaskDto extends AbstractDto
 {
@@ -18,9 +18,7 @@ final readonly class CreateTaskDto extends AbstractDto
         public readonly ?string $due_date,
         private readonly ?int $assigned_to,
         public array $presentFields = []
-    ) {
-
-    }
+    ) {}
 
     public function getAssignedTo(): ?int
     {

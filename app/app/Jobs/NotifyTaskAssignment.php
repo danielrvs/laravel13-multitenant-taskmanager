@@ -16,6 +16,7 @@ class NotifyTaskAssignment implements ShouldQueue
     use Queueable;
 
     public int $tries = 3;
+
     public array $backoff = [30, 120, 300];
 
     /**
@@ -43,15 +44,16 @@ class NotifyTaskAssignment implements ShouldQueue
 
         if ($status === 'notified_successfully') {
             Log::info("User {$this->assignedUserId} has already been notified for task {$this->taskId}. Skipping notification.");
+
             return;
         }
 
-        if (!$status) {
+        if (! $status) {
             DB::table('task_audits')->insert([
                 'task_id' => $task->id,
                 'user_id' => $user->id,
                 'action' => 'pending_notification',
-                'created_at' => now()
+                'created_at' => now(),
             ]);
         }
 
@@ -63,16 +65,16 @@ class NotifyTaskAssignment implements ShouldQueue
             ->where('user_id', $user->id)
             ->update([
                 'action' => 'notified_successfully',
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
     }
 
     public function failed(\Throwable $exception): void
     {
-        Log::critical("The job failed after 3 tries", [
+        Log::critical('The job failed after 3 tries', [
             'task_id' => $this->taskId,
             'user_id' => $this->assignedUserId,
-            'error' => $exception->getMessage()
+            'error' => $exception->getMessage(),
         ]);
     }
 }

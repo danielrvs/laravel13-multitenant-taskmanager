@@ -13,6 +13,7 @@ enum TaskPriority: string
     public function isHigherThan(TaskPriority $other): bool
     {
         $order = [self::LOW, self::MEDIUM, self::HIGH];
+
         return array_search($this, $order) > array_search($other, $order);
 
     }
@@ -20,6 +21,7 @@ enum TaskPriority: string
     public function updateTo(TaskPriority|string $newPriority): self
     {
         $target = $newPriority instanceof self ? $newPriority : self::from($newPriority);
+
         return $target;
     }
 

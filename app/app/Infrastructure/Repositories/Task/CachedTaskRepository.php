@@ -6,8 +6,8 @@ namespace App\Infrastructure\Repositories\Task;
 
 use App\Contracts\Repositories\Task\TaskRepository;
 use App\Services\Tenant\TenantManager;
-use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Contracts\Cache\LockProvider;
+use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 class CachedTaskRepository implements TaskRepository
 {
@@ -15,12 +15,12 @@ class CachedTaskRepository implements TaskRepository
         private readonly TaskRepository $next,
         private readonly TenantManager $tenantManager,
         private readonly CacheRepository $cache
-    ) {
-    }
+    ) {}
 
     private function cacheKey(): string
     {
         $tenantId = $this->tenantManager->getTenantId();
+
         return "tenant_{$tenantId}_tasks";
     }
 
@@ -33,10 +33,11 @@ class CachedTaskRepository implements TaskRepository
             return $data;
         }
 
-        if (!$this->cache instanceof LockProvider) {
+        if (! $this->cache instanceof LockProvider) {
             return $this->next->index();
         }
-        return $this->cache->lock($cacheKey . ':lock', 10)->block(5, function () use ($cacheKey) {
+
+        return $this->cache->lock($cacheKey.':lock', 10)->block(5, function () use ($cacheKey) {
             $data = $this->cache->get($cacheKey);
             if ($data !== null) {
                 return $data;
@@ -54,8 +55,9 @@ class CachedTaskRepository implements TaskRepository
         $cacheKey = $this->cacheKey();
         $this->cache->forget($cacheKey);
         $task = $this->next->create($data, $assigned_to);
-        $cacheKeyId = $cacheKey . "_{$task['id']}";
+        $cacheKeyId = $cacheKey."_{$task['id']}";
         $this->cache->put($cacheKeyId, $task, 3600);
+
         return $task;
     }
 
@@ -63,7 +65,7 @@ class CachedTaskRepository implements TaskRepository
     {
         $this->next->delete($id);
         $cacheKey = $this->cacheKey();
-        $cacheKeyId = $cacheKey . "_{$id}";
+        $cacheKeyId = $cacheKey."_{$id}";
         $this->cache->forget($cacheKey);
         $this->cache->forget($cacheKeyId);
     }
@@ -72,14 +74,15 @@ class CachedTaskRepository implements TaskRepository
     {
         $this->next->update($id, $data);
         $cacheKey = $this->cacheKey();
-        $cacheKeyId = $cacheKey . "_{$id}";
+        $cacheKeyId = $cacheKey."_{$id}";
         $this->cache->forget($cacheKey);
         $this->cache->forget($cacheKeyId);
     }
 
     public function find(int $id): ?array
     {
-        $cacheKeyId = $this->cacheKey() . "_{$id}";
+        $cacheKeyId = $this->cacheKey()."_{$id}";
+
         return $this->cache->remember($cacheKeyId, 3600, function () use ($id) {
             return $this->next->find($id);
         });

@@ -8,11 +8,9 @@ use App\Contracts\Repositories\Task\TaskRepository;
 
 class DeleteTaskService
 {
+    public function __construct(private readonly TaskRepository $repository) {}
 
-    public function __construct(private readonly TaskRepository $repository) {
-    }
-
-    public function execute(int $id) :void
+    public function execute(int $id): void
     {
         $this->repository->delete($id);
     }

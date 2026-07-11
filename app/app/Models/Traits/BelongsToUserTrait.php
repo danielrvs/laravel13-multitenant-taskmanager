@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Models\Traits;
@@ -11,7 +12,7 @@ trait BelongsToUserTrait
     {
         static::creating(function ($model) {
             $user = Auth::user();
-            if ($user && !isset($model->user_id)) {
+            if ($user && ! isset($model->user_id)) {
                 $model->user_id = $user->id;
             }
         });

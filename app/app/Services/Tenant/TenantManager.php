@@ -22,4 +22,9 @@ class TenantManager
     {
         return $this->tenantId !== null;
     }
+
+    public function clear(): void
+    {
+        $this->tenantId = null;
+    }
 }

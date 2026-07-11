@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Jobs;
 
+use App\Enums\UserRole;
 use App\Jobs\NotifyTaskAssignment;
 use App\Models\Task\Task;
 use App\Models\Tenant\Tenant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
-use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class NotifyTaskAssignmentTest extends TestCase
 {
@@ -25,7 +26,7 @@ class NotifyTaskAssignmentTest extends TestCase
         $tenant = Tenant::factory()->create();
         $user = User::factory()->create([
             'tenant_id' => $tenant->id,
-            'role' => \App\Enums\UserRole::MANAGER,
+            'role' => UserRole::MANAGER,
         ]);
         $assignToUser = User::factory()->create(['tenant_id' => $tenant->id]);
 
@@ -36,7 +37,7 @@ class NotifyTaskAssignmentTest extends TestCase
                 'description' => 'Revisar logs',
                 'assigned_to' => $assignToUser->id,
                 'priority' => 'high',
-                'status' => 'pending'
+                'status' => 'pending',
             ]);
 
         $response->assertStatus(201);
@@ -58,7 +59,7 @@ class NotifyTaskAssignmentTest extends TestCase
             'description' => 'Ejecutando job',
             'assigned_to' => $user->id,
             'priority' => 'high',
-            'status' => 'pending'
+            'status' => 'pending',
         ]);
 
         $job = new NotifyTaskAssignment($task->id, $user->id);
@@ -68,7 +69,7 @@ class NotifyTaskAssignmentTest extends TestCase
         $this->assertDatabaseCount('task_audits', 1);
         $this->assertDatabaseHas('task_audits', [
             'task_id' => $task->id,
-            'action' => 'notified_successfully'
+            'action' => 'notified_successfully',
         ]);
 
         $job->handle();

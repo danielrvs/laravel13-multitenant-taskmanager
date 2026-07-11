@@ -5,22 +5,24 @@ declare(strict_types=1);
 namespace Tests\Feature\Console;
 
 use App\Models\Task\Task;
+use App\Models\Tenant\Tenant;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class PurgeOverdueTasksTest extends TestCase
 {
     use RefreshDatabase;
 
     #[Test]
-    public function it_purges_overdue_tasks_safely():void
+    public function it_purges_overdue_tasks_safely(): void
     {
         $this->travelTo(Carbon::parse('2026-06-02'));
 
-        $tenant = \App\Models\Tenant\Tenant::factory()->create();
-        $user = \App\Models\User::factory()->create(['tenant_id' => $tenant->id]);
+        $tenant = Tenant::factory()->create();
+        $user = User::factory()->create(['tenant_id' => $tenant->id]);
 
         $taskShouldBeDeleted = Task::create([
             'tenant_id' => $tenant->id,
@@ -55,10 +57,10 @@ class PurgeOverdueTasksTest extends TestCase
         $this->assertDatabaseCount('tasks', 3);
 
         $this->artisan('tasks:purge-overdue')
-            ->expectsOutput("Deleted batch of 1 overdue tasks. Total deleted: 1")
-            ->expectsOutput("Finished purging overdue tasks and cleaning cache.")
+            ->expectsOutput('Deleted batch of 1 overdue tasks. Total deleted: 1')
+            ->expectsOutput('Finished purging overdue tasks and cleaning cache.')
             ->assertExitCode(0);
-        
+
         $this->assertDatabaseCount('tasks', 2);
         $this->assertDatabaseMissing('tasks', ['id' => $taskShouldBeDeleted->id]);
         $this->assertDatabaseHas('tasks', ['id' => $taskShouldNotBeDeleted->id]);

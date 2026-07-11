@@ -157,7 +157,9 @@ cp infrastructure/.env.example infrastructure/.env  # edit DB credentials
 ./docker-start.sh
 ```
 
-This brings up three containers: `php_app` (Laravel), `postgres_db`, and `redis_cache`.
+This brings up three containers: `php_app` (Laravel running FrankenPHP under Laravel Octane on port `8000`), `postgres_db`, and `redis_cache`.
+
+Once bootstrapped, the API will be accessible at `http://localhost:8000`.
 
 ### 3. Bootstrap the application
 

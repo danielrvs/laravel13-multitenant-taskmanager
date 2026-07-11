@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tests\Unit\Model\Task;
 
 use App\Models\Task\Vo\TaskStatus;
-use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class TaskStatusTest extends TestCase
 {
@@ -62,7 +62,6 @@ class TaskStatusTest extends TestCase
         $this->assertSame(TaskStatus::IN_PROGRESS, $next);
     }
 
-
     #[Test]
     public function it_cannot_transition_from_pending_directly_to_completed(): void
     {
@@ -110,4 +109,3 @@ class TaskStatusTest extends TestCase
         $this->assertFalse(TaskStatus::COMPLETED->isPossibleTransition(TaskStatus::IN_PROGRESS));
     }
 }
-

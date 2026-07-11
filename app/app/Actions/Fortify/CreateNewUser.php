@@ -4,9 +4,9 @@ namespace App\Actions\Fortify;
 
 use App\Concerns\PasswordValidationRules;
 use App\Concerns\ProfileValidationRules;
-use App\Models\User;
-use App\Models\Tenant\Tenant;
 use App\Enums\UserRole;
+use App\Models\Tenant\Tenant;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
@@ -27,7 +27,7 @@ class CreateNewUser implements CreatesNewUsers
         ])->validate();
 
         $tenant = Tenant::create([
-            'name' => $input['name'] . "'s Org",
+            'name' => $input['name']."'s Org",
         ]);
 
         return User::create([

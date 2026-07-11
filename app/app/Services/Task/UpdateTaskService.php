@@ -11,8 +11,7 @@ class UpdateTaskService
 {
     public function __construct(
         private readonly TaskRepository $taskRepository
-    ) {
-    }
+    ) {}
 
     public function execute(int $id, UpdateTaskDto $dto): void
     {

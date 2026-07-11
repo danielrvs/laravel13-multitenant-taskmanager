@@ -10,7 +10,6 @@ enum TaskStatus: string
     case IN_PROGRESS = 'in_progress';
     case COMPLETED = 'completed';
 
-
     private const TRANSITIONS = [
         'pending' => ['in_progress'],
         'in_progress' => ['completed', 'pending'],
@@ -31,7 +30,7 @@ enum TaskStatus: string
     {
         $target = $newStatus instanceof self ? $newStatus : self::from($newStatus);
 
-        if (!$this->isPossibleTransition($target)) {
+        if (! $this->isPossibleTransition($target)) {
             throw new \LogicException(
                 "Transition not allowed from '{$this->value}' to '{$target->value}'."
             );

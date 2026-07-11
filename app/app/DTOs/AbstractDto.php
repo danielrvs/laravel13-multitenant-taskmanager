@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\DTOs;
 
 use Illuminate\Http\Request;
-use ReflectionClass;
 use Illuminate\Support\Str;
+use ReflectionClass;
 use ReflectionProperty;
 
 abstract readonly class AbstractDto
@@ -18,8 +18,8 @@ abstract readonly class AbstractDto
         $reflection = new ReflectionClass(static::class);
         $constructor = $reflection->getConstructor();
 
-        if (!$constructor) {
-            return new static();
+        if (! $constructor) {
+            return new static;
         }
 
         $arguments = [];
@@ -28,6 +28,7 @@ abstract readonly class AbstractDto
 
             if ($paramName === 'presentFields') {
                 $arguments[$paramName] = array_keys($sourceData);
+
                 continue;
             }
 
@@ -59,7 +60,7 @@ abstract readonly class AbstractDto
             $mappedData[$name] = $property->getValue($this);
         }
 
-        if (property_exists($this, 'presentFields') && !empty($this->presentFields)) {
+        if (property_exists($this, 'presentFields') && ! empty($this->presentFields)) {
             return array_intersect_key($mappedData, array_flip($this->presentFields));
         }
 

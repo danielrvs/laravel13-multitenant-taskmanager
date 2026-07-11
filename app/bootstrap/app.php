@@ -27,7 +27,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->api(append: [
-            TenantMiddleware::class
+            TenantMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

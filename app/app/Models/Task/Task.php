@@ -6,14 +6,14 @@ namespace App\Models\Task;
 
 use App\Models\Task\Vo\TaskPriority;
 use App\Models\Task\Vo\TaskStatus;
+use App\Models\Tenant\Tenant;
 use App\Models\Traits\BelongsToTenantTrait;
 use App\Models\Traits\BelongsToUserTrait;
 use App\Models\User;
-use App\Models\Tenant\Tenant;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Validation\ValidationException;
 
@@ -48,13 +48,13 @@ class Task extends Model
         $user = User::findOrFail($userId);
         if ($this->tenant_id !== $user->tenant_id) {
             throw ValidationException::withMessages([
-                'assigned_to' => 'User does not belong to the same tenant.'
+                'assigned_to' => 'User does not belong to the same tenant.',
             ]);
         }
 
         if ($user->id === $this->user_id) {
             throw ValidationException::withMessages([
-                'assigned_to' => 'Cannot assign task to the creator.'
+                'assigned_to' => 'Cannot assign task to the creator.',
             ]);
         }
 
@@ -75,7 +75,7 @@ class Task extends Model
 
     public function isOverdue(): bool
     {
-        return $this->due_date !== null && $this->due_date->isPast() && !$this->isCompleted();
+        return $this->due_date !== null && $this->due_date->isPast() && ! $this->isCompleted();
     }
 
     protected function title(): Attribute
@@ -84,13 +84,13 @@ class Task extends Model
             set: function (?string $value) {
                 if (is_null($value) || trim($value) === '') {
                     throw ValidationException::withMessages([
-                        'title' => 'Title cannot be empty'
+                        'title' => 'Title cannot be empty',
                     ]);
                 }
 
                 if (strlen($value) > 255) {
                     throw ValidationException::withMessages([
-                        'title' => 'Title cannot exceed 255 characters'
+                        'title' => 'Title cannot exceed 255 characters',
                     ]);
                 }
 
